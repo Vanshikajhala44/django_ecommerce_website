@@ -1,0 +1,52 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title %}Products{% endblock title %}
+
+{% block main-content %}
+<div class="container my-4">
+
+  <!-- 🔽 PRICE SORTING BUTTONS -->
+  <div class="d-flex justify-content-end mb-3">
+    <a href="?sort=low" class="btn btn-outline-primary btn-sm me-2">
+      Price: Low → High
+    </a>
+    <a href="?sort=high" class="btn btn-outline-primary btn-sm">
+      Price: High → Low
+    </a>
+  </div>
+
+  <div class="row">
+    {% for product in products %}
+      <div class="col-sm-3 mb-4">
+        <div class="card h-100">
+
+          <a href="{% url 'product-detail' product.id %}">
+            <img src="{{ product.product_image.url }}"
+                 class="card-img-top"
+                 alt="{{ product.title }}"
+                 height="200px">
+          </a>
+
+          <div class="card-body text-center">
+            <h6 class="fw-bold">{{ product.title }}</h6>
+
+            <div>
+              <span class="fw-bold text-success">
+                ₹ {{ product.discounted_price }}
+              </span>
+              <br>
+              <small class="text-muted text-decoration-line-through">
+                ₹ {{ product.selling_price }}
+              </small>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    {% empty %}
+      <h4 class="text-center">No products available</h4>
+    {% endfor %}
+  </div>
+</div>
+{% endblock main-content %}

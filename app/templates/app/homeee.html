@@ -1,0 +1,29 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block main-content %}
+<h2>ShoppingX Deals of The Day</h2>
+
+<div class="product-container">
+  {% if products %}
+    {% for product in products %}
+      <div class="product-card">
+        <!-- Product image -->
+        {% if product.product_image %}
+          <img src="{{ product.product_image.url }}" alt="{{ product.title }}" width="200px">
+        {% else %}
+          <img src="{% static 'app/images/default.jpg' %}" alt="No image" width="200px">
+        {% endif %}
+
+        <!-- Product info -->
+        <h3>{{ product.title }}</h3>
+        <p>{{ product.description }}</p>
+        <p>Price: Rs. {{ product.discounted_price }}</p>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No products available.</p>
+  {% endif %}
+</div>
+{% endblock %}
+

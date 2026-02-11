@@ -1,0 +1,47 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title %}Mobile{% endblock title %}
+
+{% block main-content %}
+<div class="container my-5">
+  <div class="row">
+
+    <!-- Sidebar -->
+    <div class="col-sm-3">
+      <div class="list-group">
+        <a href="{% url 'mobiles' %}" 
+           class="list-group-item list-group-item-action">
+           ALL MOBILES
+        </a>
+
+        <a href="{% url 'mobiledata' 'redmi' %}" 
+           class="list-group-item list-group-item-action">
+           Redmi
+        </a>
+
+        <a href="{% url 'mobiledata' 'samsung' %}" 
+           class="list-group-item list-group-item-action">
+           Samsung
+        </a>
+
+        <a href="{% url 'mobiledata' 'oneplus' %}" 
+           class="list-group-item list-group-item-action">
+           OnePlus
+        </a>
+
+        <a href="{% url 'mobiledata' 'iphone' %}" 
+           class="list-group-item list-group-item-action">
+           iPhone
+        </a>
+      </div>
+    </div>
+
+    <!-- Product Area -->
+    <div class="col-sm-8 offset-sm-1">
+      <!-- mobiles will appear here -->
+    </div>
+
+  </div>
+</div>
+{% endblock main-content %}
