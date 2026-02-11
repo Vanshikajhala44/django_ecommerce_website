@@ -11,6 +11,8 @@ from .forms import UserProfileForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 from .models import Address
 from .forms import AddressForm
+from .models import Product, Cart, Address, Order
+from django.shortcuts import get_object_or_404, redirect
 
 
 
@@ -21,8 +23,8 @@ from .forms import AddressForm
 class Product_view(View):
     def get(self, request):
         if not request.user.is_authenticated:
-         return redirect('login')
-    
+            return redirect('login')
+
         topwears = Product.objects.filter(CATEGORY='TW')
         bottomwears = Product.objects.filter(CATEGORY='BW')
         mobiles = Product.objects.filter(CATEGORY='M')
@@ -36,10 +38,9 @@ class Product_view(View):
         })
 
 
-# ================= PRODUCT DETAIL =================
 class ProductDetailView(View):
     def get(self, request, pk):
-        product = Product.objects.get(pk=pk)
+        product = get_object_or_404(Product, pk=pk)
         return render(request, 'app/productdetail.html', {'product': product})
 
 
@@ -152,12 +153,87 @@ def address(request):
     return render(request, 'app/address.html', {'addresses': addresses})
 
 # ================= SIMPLE PAGES =================
-def add_to_cart(request):
-    return render(request, 'app/addtocart.html')
+# def add_to_cart(request):
+#     return render(request, 'app/addtocart.html')
 
 
 def buy_now(request):
     return render(request, 'app/buynow.html')
+
+
+
+
+
+@login_required
+def add_to_cart(request):
+    product_id = request.GET.get('prod_id')
+
+    if not product_id:
+        return redirect('cart')
+
+    product = get_object_or_404(Product, id=product_id)
+
+    Cart.objects.create(
+        user=request.user,
+        product=product
+    )
+
+    return redirect('cart')
+
+
+def show_cart(request):
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user)
+        amount = sum(item.total_cost for item in cart)
+        totalamount = amount + 40
+
+        return render(request, 'app/cart.html', {
+            'cart': cart,
+            'amount': amount,
+            'totalamount': totalamount,
+        })
+    else:
+        return redirect('login')
+
+
+@login_required
+def checkout(request):
+    cart = Cart.objects.filter(user=request.user)
+    addresses = Address.objects.filter(user=request.user)
+
+    amount = sum(item.total_cost for item in cart)
+    shipping = 40
+    total_amount = amount + shipping
+
+    return render(request, 'app/checkout.html', {
+        'cart': cart,
+        'addresses': addresses,
+        'amount': amount,
+        'shipping': shipping,
+        'total_amount': total_amount
+    })
+
+@login_required
+def place_order(request):
+    if request.method == 'POST':
+        address_id = request.POST.get('address')
+        address = Address.objects.get(id=address_id)
+        cart_items = Cart.objects.filter(user=request.user)
+
+        for item in cart_items:
+            Order.objects.create(
+                user=request.user,
+                address=address,
+                product=item.product,
+                quantity=item.quantity
+            )
+
+        cart_items.delete()
+        return redirect('order_success')
+
+def order_success(request):
+    return render(request, 'app/order_success.html')
+
 
 
 # def profile(request):
@@ -168,8 +244,8 @@ def buy_now(request):
 #     return render(request, 'app/address.html')
 
 
-def orders(request):
-    return render(request, 'app/orders.html')
+# def orders(request):
+#     return render(request, 'app/orders.html')
 
 
 def change_password(request):

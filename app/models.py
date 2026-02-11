@@ -108,6 +108,10 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.product.title} ({self.quantity})"
+    
+    @property
+    def total_cost(self):
+        return self.quantity * self.product.discounted_price
 
 
 
@@ -142,4 +146,15 @@ class Address(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.address1}"
+    
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    ordered_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50, default='Pending')
+
+
 

@@ -1,0 +1,42 @@
+{% extends 'app/base.html' %}
+{% block main-content %}
+
+<div class="container my-5">
+    <h3>My Cart</h3>
+
+    {% if cart %}
+    {% for item in cart %}
+        <div class="card mb-3 p-3">
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <img src="{{ item.product.product_image.url }}" class="img-fluid">
+                </div>
+                <div class="col-md-6">
+                    <h5>{{ item.product.title }}</h5>
+                    <p>Price: ₹ {{ item.product.discounted_price }}</p>
+                    <p>Quantity: {{ item.quantity }}</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <h5>Total: ₹ {{ item.total_cost }}</h5>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <!-- Cart Summary: OUTSIDE the loop -->
+    <div class="card p-3 mt-3">
+        <h5>Cart Summary</h5>
+        <p>Subtotal: ₹ {{ amount }}</p>
+        <p>Shipping: ₹ {{ shipping }}</p>
+        <p><strong>Total: ₹ {{ totalamount }}</strong></p>
+    </div>
+
+{% else %}
+    <h4 class="text-center">Your cart is empty</h4>
+{% endif %}
+
+
+       
+</div>
+
+{% endblock %}

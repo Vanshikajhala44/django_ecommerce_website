@@ -30,9 +30,14 @@
                 {% endif %}
             </h4>
             <br>
+              <a href="{% url 'add_to_cart' %}?prod_id={{ product.id }}"
+         class="btn btn-primary shadow px-5 py-2">
+               Add to Cart
+                </a>
+            
 
-            {% comment %} <a href="{% url 'add-to-cart' product.pk %}" class="btn btn-primary shadow px-5 py-2">Add to Cart</a>
-            <a href="{% url 'buy-now' product.pk %}" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a> {% endcomment %}
+            
+            {% comment %} <a href="{% url 'buy-now' product.pk %}" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a>  {% endcomment %}
 
             <h5 class="mt-5">Available Offers</h5>
             <ul>

@@ -86,13 +86,11 @@
            profile
         </a>
     </li>
-
-         <li class="nav-item mx-2">
-        <a href="{% url 'add-to-cart' %}" class="nav-link text-white">
-            Cart
-        </a>
-    </li>
-
+         <li>
+         <a href="{% url 'add_to_cart' %}?prod_id={{ product.id }}"
+   class="btn btn-primary shadow px-5 py-2">
+   Add to Cart
+   </a></li>
 {% else %}
 <li class="nav-item mx-2">
     <a href="{% url 'login' %}" class="nav-link text-white">Login</a>

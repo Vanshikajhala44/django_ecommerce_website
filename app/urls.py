@@ -19,10 +19,10 @@ urlpatterns = [
     path('product-detail/<int:pk>/', views.ProductDetailView.as_view(), name='product-detail'),
 
     # Cart & user
-    path('cart/', views.add_to_cart, name='add-to-cart'),
-    path('buy/', views.buy_now, name='buy-now'),
+    # path('cart/', views.add_to_cart, name='add-to-cart'),
+    # path('buy/', views.buy_now, name='buy-now'),
     
-    path('orders/', views.orders, name='orders'),
+    # path('orders/', views.orders, name='orders'),
 #     path('changepassword/', views.change_password, name='changepassword'),
 
     # Auth
@@ -71,6 +71,12 @@ urlpatterns = [
    path('add-address/', views.add_address, name='add_address'),
   path('edit-address/<int:id>/', views.edit_address, name='edit_address'),
    path('delete-address/<int:id>/', views.delete_address, name='delete_address'),
+
+   path('add-to-cart/', views.add_to_cart, name='add_to_cart'),
+    path('cart/', views.show_cart, name='cart'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('place-order/', views.place_order, name='place_order'),
+    path('order-success/', views.order_success, name='order_success'),
 
 
 
