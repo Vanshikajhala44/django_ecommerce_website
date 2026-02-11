@@ -1,0 +1,100 @@
+{% extends 'app/base.html' %}
+
+{% block main-content %}
+<style>
+/* ===== Address Form Styles ===== */
+
+.address-form-wrapper {
+    max-width: 650px;
+    margin: auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 600;
+    color: #333;
+}
+
+.address-form p {
+    margin-bottom: 15px;
+}
+
+.address-form input,
+.address-form select,
+.address-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.address-form input:focus,
+.address-form textarea:focus {
+    outline: none;
+    border-color: #28a745;
+}
+
+/* Buttons */
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-submit {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 6px;
+    border: none;
+    font-weight: 500;
+}
+
+.btn-submit:hover {
+    background-color: #218838;
+    color: #fff;
+}
+
+.btn-cancel {
+    background-color: #6c757d;
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.btn-cancel:hover {
+    background-color: #5a6268;
+    color: #fff;
+}
+</style>
+
+<div class="container my-5">
+    <div class="address-form-wrapper">
+
+        <h3 class="form-title">
+            {% if form.instance.pk %}Edit Address{% else %}Add New Address{% endif %}
+        </h3>
+
+        <form method="POST" class="address-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">
+                    {% if form.instance.pk %}Update{% else %}Add{% endif %}
+                </button>
+                <a href="{% url 'address' %}" class="btn-cancel">Cancel</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

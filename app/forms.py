@@ -63,7 +63,16 @@ class ProfileForm(forms.ModelForm):
         fields = ['address', 'address2', 'city', 'state', 'zip_code']
 
 
+
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
         fields = ['name', 'address1', 'address2', 'city', 'state', 'zip_code']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full Name'}),
+            'address1': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Address Line 1'}),
+            'address2': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Address Line 2'}),
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
+            'state': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'State'}),
+            'zip_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zip Code'}),
+        }

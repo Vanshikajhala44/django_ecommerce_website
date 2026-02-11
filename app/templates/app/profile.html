@@ -1,26 +1,41 @@
 {% extends 'app/base.html' %}
-{% load static %}
-{% block title %}Profile{% endblock title %}
+
 {% block main-content %}
 <div class="container my-5">
- <div class="row">
-  <h3>Welcome</h3>
-  <div class="col-sm-2 border-end">
-   <ul class="list-unstyled">
-    <li class="d-grid"><a href="{% url 'profile' %}" class="btn btn-primary">Profile</a></li>
-    <li class="d-grid"><a href="{% url 'address' %}" class="btn">Address</a></li>
-   </ul>
-  </div>
-  <div class="col-sm-8 offset-sm-1">
-   <form method="post">
-    {% csrf_token %}
-    {{ user_form.as_p }}
-    {{ profile_form.as_p }}
-    <button type="submit" class="btn btn-primary mt-3">Submit</button>
-</form>
+    <h3>My Profile</h3>
+    
+    <!-- Profile Form -->
+    <form method="POST">
+        {% csrf_token %}
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+        <button type="submit" class="btn btn-primary mt-3" name="update_profile">Update Profile</button>
+    </form>
 
+    <hr>
+    
+    <!-- Optional: Inline Addresses -->
+    <h4>My Addresses</h4>
+    <ul class="list-group mb-3">
+        {% for addr in addresses %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ addr.name }}, {{ addr.address1 }}, {{ addr.city }}, {{ addr.state }} - {{ addr.zip_code }}
+            <span>
+                <a href="{% url 'edit_address' addr.id %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'delete_address' addr.id %}" class="btn btn-sm btn-danger">Delete</a>
+            </span>
+        </li>
+        {% empty %}
+        <li class="list-group-item">No addresses found. <a href="{% url 'add_address' %}">Add one</a>.</li>
+        {% endfor %}
+    </ul>
 
-  </div>
- </div>
+    <!-- Optional: Add Address Form Inline -->
+    <h5>Add New Address</h5>
+    <form method="POST">
+        {% csrf_token %}
+        {{ address_form.as_p }}
+        <button type="submit" name="add_address" class="btn btn-success mt-2">Add Address</button>
+    </form>
 </div>
-{% endblock main-content %}
+{% endblock %}

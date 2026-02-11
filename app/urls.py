@@ -21,10 +21,9 @@ urlpatterns = [
     # Cart & user
     path('cart/', views.add_to_cart, name='add-to-cart'),
     path('buy/', views.buy_now, name='buy-now'),
-    path('profile/', views.profile, name='profile'),
-    # path('address/', views.address, name='address'),
+    
     path('orders/', views.orders, name='orders'),
-    path('changepassword/', views.change_password, name='changepassword'),
+#     path('changepassword/', views.change_password, name='changepassword'),
 
     # Auth
     path('login/', views.login, name='login'),
@@ -65,6 +64,13 @@ urlpatterns = [
          name='password_change_done'),
     # path('change-password/done/', views.password_change_done, name='password_change_done'),=
     # path('change-password/', views.change_password, name='changepassword'),
+   
+   
+    path('profile/', views.profile, name='profile'),
+   path('addresses/', views.address, name='address'),
+   path('add-address/', views.add_address, name='add_address'),
+  path('edit-address/<int:id>/', views.edit_address, name='edit_address'),
+   path('delete-address/<int:id>/', views.delete_address, name='delete_address'),
 
 
 

@@ -16,6 +16,8 @@ from .forms import AddressForm
 
 
 
+
+
 class Product_view(View):
     def get(self, request):
         if not request.user.is_authenticated:
@@ -74,24 +76,35 @@ def buy_now(request):
 def profile(request):
     user = request.user
     profile = user.profile  # assumes you have a Profile model linked to User
+    addresses = Address.objects.filter(user=user)  # get all addresses
 
     if request.method == "POST":
-        user_form = UserProfileForm(request.POST, instance=user)
-        profile_form = ProfileForm(request.POST, instance=profile)
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            return redirect('profile')  # reload page after save
+        # check which form is submitted
+        if 'update_profile' in request.POST:
+            user_form = UserProfileForm(request.POST, instance=user)
+            profile_form = ProfileForm(request.POST, instance=profile)
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+                return redirect('profile')
+        elif 'add_address' in request.POST:
+            address_form = AddressForm(request.POST)
+            if address_form.is_valid():
+                address = address_form.save(commit=False)
+                address.user = request.user
+                address.save()
+                return redirect('profile')
     else:
         user_form = UserProfileForm(instance=user)
         profile_form = ProfileForm(instance=profile)
+        address_form = AddressForm()
 
     return render(request, 'app/profile.html', {
         'user_form': user_form,
-        'profile_form': profile_form
+        'profile_form': profile_form,
+        'address_form': address_form,
+        'addresses': addresses
     })
-from .forms import AddressForm
-
 @login_required
 def add_address(request):
     if request.method == 'POST':
@@ -105,6 +118,38 @@ def add_address(request):
         form = AddressForm()
     return render(request, 'app/add_address.html', {'form': form})
 
+@login_required
+def edit_address(request, id):
+    # Get the address for the logged-in user
+    address = Address.objects.get(id=id, user=request.user)
+
+    if request.method == 'POST':
+        # Pass the instance to pre-fill the form
+        form = AddressForm(request.POST, instance=address)
+        if form.is_valid():
+            form.save()
+            return redirect('address')  # After saving, go back to address list
+    else:
+        form = AddressForm(instance=address)  # Pre-fill form with existing data
+
+    # Render the same template as add_address
+    return render(request, 'app/add_address.html', {'form': form})
+
+@login_required
+def delete_address(request, id):
+    address = Address.objects.get(id=id, user=request.user)
+    if request.method == 'POST':
+        address.delete()
+        return redirect('address')
+    return render(request, 'app/delete_address.html', {'address': address})
+
+
+
+
+@login_required
+def address(request):
+    addresses = Address.objects.filter(user=request.user)
+    return render(request, 'app/address.html', {'addresses': addresses})
 
 # ================= SIMPLE PAGES =================
 def add_to_cart(request):
